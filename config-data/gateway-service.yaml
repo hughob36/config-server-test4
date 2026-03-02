@@ -1,28 +1,38 @@
 server:
-  port: 8080  # Te sugiero 8080 o 9090, el 443 requiere permisos de admin y certificados SSL
+  port: 8080
 
 spring:
   cloud:
     gateway:
-      # CONFIGURACIÓN DEL DISCOVERY LOCATOR (CORREGIDA)
       server:
         webflux:
+          # Solución al Warning: default-filters ahora cuelga de webflux
+          default-filters:
+            - name: RewritePath
+              args:
+                regexp: "^/.*?/(?<remaining>.*)$"
+                replacement: "/${remaining}"
+          # Configuración del buscador de servicios corregida
           discovery:
             locator:
               enabled: true
               lower-case-service-id: true
-      
-      # CONFIGURACIÓN DE FILTROS (CORREGIDA)
-      default-filters:
-        - name: RewritePath
-          args:
-            regexp: "^/.*?/(?<remaining>.*)$"
-            replacement: "/${remaining}"
 
-# CONEXIÓN A EUREKA
+# Configuración de Eureka y optimización de red
 eureka:
+  instance:
+    # Solución al log: "Cannot determine local hostname"
+    hostname: localhost
+    prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-  instance:
-    prefer-ip-address: true # Recomendado para microservicios locales
+    # Opcional: para que el Gateway refresque rápido su lista de servicios
+    fetch-registry: true
+    register-with-eureka: true
+
+# Para que puedas ver logs detallados si algo falla en el ruteo
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
