@@ -1,6 +1,6 @@
 spring:
   application:
-     name: pokemon2-service 
+     name: pokemon4-service 
 # 1. Configuración de Puerto Dinámico (Clave para Múltiples Instancias)
 server: 
   port: 0 
