@@ -4,19 +4,19 @@ server:
 spring:
   cloud:
     gateway:
+      # 1. Configuración de Webflux (filtros globales)
       server:
         webflux:
-          # Solución al Warning: default-filters ahora cuelga de webflux
           default-filters:
             - name: RewritePath
               args:
                 regexp: "^/.*?/(?<remaining>.*)$"
                 replacement: "/${remaining}"
-          # Configuración del buscador de servicios corregida
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
+      # 2. Configuración del Localizador (FUERA de server.webflux)
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 
 # Configuración de Eureka y optimización de red
 eureka:

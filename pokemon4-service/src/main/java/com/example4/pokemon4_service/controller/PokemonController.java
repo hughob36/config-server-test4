@@ -19,4 +19,10 @@ public class PokemonController {
     public Pokemon findPokemon(@PathVariable int id) {
         return pokemonService.getPokemon(id);
     }
+
+    @GetMapping("/saludo")
+    public String saludo(){
+        return "Hola";
+    }
+
 }
