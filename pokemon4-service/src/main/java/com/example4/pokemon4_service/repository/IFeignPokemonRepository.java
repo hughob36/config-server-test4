@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface IFeignPokemonRepository {
 
     @GetMapping("/pokemon/{id}")
-    public Pokemon getPokemon(@PathVariable("id") int id);
+    public Pokemon getPokemon(@PathVariable int id);
 }
